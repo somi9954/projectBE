@@ -3,6 +3,7 @@ package org.project.models.member;
 import lombok.RequiredArgsConstructor;
 import org.project.api.controllers.members.JoinValidator;
 import org.project.api.controllers.members.RequestJoin;
+import org.project.commons.contansts.MemberType;
 import org.project.entities.Member;
 import org.project.repositories.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ public class MemberSaveService {
                 .name(form.name())
                 .password(hash)
                 .mobile(form.mobile())
+                .type(MemberType.USER)
                 .build();
 
         save(member);
