@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 
@@ -30,22 +29,23 @@ public class MemberJoinTest {
     @DisplayName("회원 가입 테스트")
     void JoinTest() throws Exception {
         RequestJoin form = RequestJoin.builder()
-                //.email("user01@test.org")
-                //.password("_aA123456")
-                //.confirmPassword("_aA123456")
-                //.name("사용자01")
+                .email("user01@test.org")
+                .password("_aA123456")
+                .confirmPassword("_aA123456")
+                .name("사용자01")
                 .mobile("010-0000-0000")
-                //.agree(true)
+                .agree(true)
                 .build();
 
         ObjectMapper om = new ObjectMapper();
         String params = om.writeValueAsString(form);
 
         mockMvc.perform(
-                post("/api/v1/member").with(csrf())
+                post("/api/v1/member")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .characterEncoding("UTF-8")
                         .content(params)
+                        //.with(csrf().asHeader())
         ).andDo(print());
     }
 }
