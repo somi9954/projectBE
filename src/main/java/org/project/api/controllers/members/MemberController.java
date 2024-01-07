@@ -74,7 +74,5 @@ public class MemberController {
         if (errors.hasErrors()) {
             throw new BadRequestExeption(Utils.getMessages(errors));
         }
-
-
     }
 }
