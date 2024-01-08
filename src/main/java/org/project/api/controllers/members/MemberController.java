@@ -2,8 +2,9 @@ package org.project.api.controllers.members;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+
 import org.project.commons.Utils;
-import org.project.commons.exceptions.BadRequestExeption;
+import org.project.commons.exceptions.BadRequestException;
 import org.project.commons.rests.JSONData;
 import org.project.entities.Member;
 import org.project.models.member.MemberInfo;
@@ -28,7 +29,7 @@ public class MemberController {
     private final MemberLoginService loginService;
 
     @PostMapping
-    public ResponseEntity<JSONData> join(@RequestBody @Valid RequestJoin form, Errors errors) {
+    public ResponseEntity<JSONData> join(@Valid @RequestBody RequestJoin form, Errors errors) {
         saveService.save(form, errors);
 
         errorProcess(errors);
@@ -40,7 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<JSONData> token(@RequestBody @Valid RequestLogin form, Errors errors) {
+    public ResponseEntity<JSONData> token(@Valid @RequestBody  RequestLogin form, Errors errors) {
         errorProcess(errors);
 
         String accessToken = loginService.login(form);
@@ -70,9 +71,9 @@ public class MemberController {
         return "관리자 페이지 접속....";
     }
 
-    public void errorProcess(Errors errors) {
+    private void errorProcess(Errors errors) {
         if (errors.hasErrors()) {
-            throw new BadRequestExeption(Utils.getMessages(errors));
+            throw new BadRequestException(Utils.getMessages(errors));
         }
     }
 }
