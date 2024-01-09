@@ -24,7 +24,7 @@ import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity //@PreAuthorize("hasAuthority('ADMIN'))
+@EnableMethodSecurity
 public class SecurityConfig {
 
     @Autowired
@@ -41,12 +41,12 @@ public class SecurityConfig {
                 .sessionManagement(c -> c.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http.exceptionHandling(c -> {
-            c.authenticationEntryPoint((req, res, e) -> {
-                res.sendError(HttpServletResponse.SC_UNAUTHORIZED); //401
+            c.authenticationEntryPoint((req,  res,  e) -> {
+                res.sendError(HttpServletResponse.SC_UNAUTHORIZED); //  401
             });
 
-            c.accessDeniedHandler((req, res, e) -> {
-                res.sendError(HttpServletResponse.SC_FORBIDDEN); //403
+            c.accessDeniedHandler((req,res, e) -> {
+                res.sendError(HttpServletResponse.SC_FORBIDDEN); // 403
             });
         });
         http.authorizeHttpRequests(c -> {

@@ -7,12 +7,12 @@ import java.util.Map;
 
 public class CommonException extends  RuntimeException{
     private HttpStatus status;
-    private Map<String, List<String>> messges;
+    private Map<String, List<String>> messages;
 
     public CommonException(Map<String, List<String>> messages, HttpStatus status) {
         super();
         this.status = status;
-        this.messges = messages;
+        this.messages = messages;
     }
 
     public CommonException(String message, HttpStatus status) {
@@ -25,6 +25,6 @@ public class CommonException extends  RuntimeException{
     }
 
     public Map<String, List<String>> getMessages() {
-        return messges;
+        return messages;
     }
 }

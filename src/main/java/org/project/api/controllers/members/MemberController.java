@@ -29,7 +29,7 @@ public class MemberController {
     private final MemberLoginService loginService;
 
     @PostMapping
-    public ResponseEntity<JSONData> join(@Valid @RequestBody RequestJoin form, Errors errors) {
+    public ResponseEntity<JSONData> join(@RequestBody @Valid RequestJoin form, Errors errors) {
         saveService.save(form, errors);
 
         errorProcess(errors);
@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<JSONData> token(@Valid @RequestBody  RequestLogin form, Errors errors) {
+    public ResponseEntity<JSONData> token(@RequestBody @Valid  RequestLogin form, Errors errors) {
         errorProcess(errors);
 
         String accessToken = loginService.login(form);

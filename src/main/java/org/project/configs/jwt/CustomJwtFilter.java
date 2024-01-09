@@ -36,7 +36,7 @@ public class CustomJwtFilter extends GenericFilterBean {
 
         /** 로그인 유지 처리 S */
         if (StringUtils.hasText(jwt)){ // StringUtils.hastext() -> null인지 isblank인지 확인하는 메서드
-            tokenProvider.validateToken(jwt); // 토큰 이상 시 -> 예외 발생
+            tokenProvider.validateToken(jwt); // 토큰 이상시 -> 예외 발생
 
             Authentication authentication = tokenProvider.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
