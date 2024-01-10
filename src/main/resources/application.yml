@@ -22,7 +22,7 @@ spring:
         defer-datasource-initialization: true
         # dialect: org.hibernate.dialect.OracleDialect
     hibernate:
-      ddlAuto: create
+      ddlAuto: update
 
 logging:
   level:
