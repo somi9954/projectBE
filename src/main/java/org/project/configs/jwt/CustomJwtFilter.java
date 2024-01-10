@@ -24,15 +24,14 @@ public class CustomJwtFilter extends GenericFilterBean {
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest req = (HttpServletRequest)request;
 
+
         /** 요청 헤더 Authorization 항목의 JWT 토큰 추출 S*/
         String header = req.getHeader("Authorization");
         String jwt = null;
-        if (StringUtils.hasText(header)) {
-            // Bearer .... 토큰 추출
+        if (StringUtils.hasText(header)) { // Bearer .... 토큰 추출
             jwt = header.substring(7);
         }
         /** 요청 헤더 Authorization 항목의 JWT 토큰 추출 E*/
-
 
         /** 로그인 유지 처리 S */
         if (StringUtils.hasText(jwt)){ // StringUtils.hastext() -> null인지 isblank인지 확인하는 메서드
@@ -43,7 +42,7 @@ public class CustomJwtFilter extends GenericFilterBean {
         }
         /** 로그인 유지 처리 E */
 
-        chain.doFilter(request,response);
 
+        chain.doFilter(request,response);
     }
 }

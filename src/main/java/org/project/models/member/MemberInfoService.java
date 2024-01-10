@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 
 @Service
@@ -27,7 +28,7 @@ public class MemberInfoService implements UserDetailsService {
         Member member = repository.findByEmail(username).orElseThrow(() -> new UsernameNotFoundException(username));
 
         MemberType type = Objects.requireNonNullElse(member.getType(), MemberType.USER);
-        List<GrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(type.name()));
+        List<SimpleGrantedAuthority> authorities = Arrays.asList(new SimpleGrantedAuthority(type.name()));
 
         return MemberInfo.builder()
                 .email(member.getEmail())

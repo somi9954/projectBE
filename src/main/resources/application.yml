@@ -19,6 +19,7 @@ spring:
         # 콘솔 창에 출력되는 쿼리를 가독성 좋게 포매팅
         format_sql: true
         use_sql_comments: true
+        defer-datasource-initialization: true
         # dialect: org.hibernate.dialect.OracleDialect
     hibernate:
       ddlAuto: create
@@ -26,6 +27,7 @@ spring:
 logging:
   level:
     org:
+      springframework.web.servlet.handler.HandlerMappingIntrospector: error
       hibernate:
         type:
           descriptor:

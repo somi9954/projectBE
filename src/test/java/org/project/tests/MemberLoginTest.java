@@ -1,13 +1,14 @@
 package org.project.tests;
 
+import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
-import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.project.api.controllers.members.RequestLogin;
 import org.project.commons.contansts.MemberType;
+import org.project.commons.exceptions.BadRequestException;
 import org.project.commons.rests.JSONData;
 import org.project.entities.Member;
 import org.project.models.member.MemberSaveService;
@@ -20,6 +21,8 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -45,9 +48,9 @@ public class MemberLoginTest {
     @BeforeEach
     void init() {
         member = Member.builder()
-                .email("user01@test.org")
+                .email("user02@test.org")
                 .password(encoder.encode("_aA123456"))
-                .name("사용자01")
+                .name("사용자02")
                 .mobile("010-0000-0000")
                 .type(MemberType.ADMIN)
                 .build();
@@ -64,6 +67,8 @@ public class MemberLoginTest {
         ObjectMapper om = new ObjectMapper();
         String params = om.writeValueAsString(form);
 
+        System.out.println("Request Parameters: " + params);
+
         String body = mockMvc.perform(
                         post("/api/v1/member/token")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -72,15 +77,19 @@ public class MemberLoginTest {
                 ).andDo(print())
                 .andReturn()
                 .getResponse()
-                .getContentAsString(Charset.forName("UTF-8"));
+                .getContentAsString(StandardCharsets.UTF_8);
 
-        JSONData data = om.readValue(body, JSONData.class);
-        String accessToken = (String)data.getData();
+        System.out.println("Response Body: " + body);
 
-        mockMvc.perform(get("/api/v1/member/admin")
-                        .header("Authorization", "Bearer " + accessToken)
-                ).andDo(print())
-                .andExpect(status().isOk());
+            JSONData data = om.readValue(body, JSONData.class);
+            String accessToken = (String) data.getData();
+
+
+            mockMvc.perform(get("/api/v1/member/admin")
+                            .header("Authorization", "Bearer " + accessToken)
+                    ).andDo(print())
+                    .andExpect(status().isOk());
+
     }
 
     @Test

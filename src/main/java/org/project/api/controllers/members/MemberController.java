@@ -41,7 +41,7 @@ public class MemberController {
     }
 
     @PostMapping("/token")
-    public ResponseEntity<JSONData> token(@RequestBody @Valid  RequestLogin form, Errors errors) {
+    public ResponseEntity<JSONData> token(@RequestBody @Valid RequestLogin form, Errors errors) {
         errorProcess(errors);
 
         String accessToken = loginService.login(form);
