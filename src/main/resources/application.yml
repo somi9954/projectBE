@@ -27,7 +27,6 @@ spring:
 logging:
   level:
     org:
-      springframework.web.servlet.handler.HandlerMappingIntrospector: error
       hibernate:
         type:
           descriptor:
