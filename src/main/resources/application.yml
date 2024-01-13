@@ -8,7 +8,8 @@ spring:
     url: jdbc:oracle:thin:@localhost:1521:orcl
     username: PROJECT_BE
     password: _aA123456
-
+  aop:
+    proxy-target-class: true
   # JPA 설정
   jpa:
     open-in-view: false

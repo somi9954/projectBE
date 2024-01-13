@@ -16,5 +16,5 @@ public class JSONData{
     @NonNull
     private Object data;
     private Object message;
-
+    private Object code;
 }
