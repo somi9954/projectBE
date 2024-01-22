@@ -28,7 +28,7 @@ public class TodoData extends Base{
     private Todo todo;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="seq")
+    @JoinColumn(name="userNo")
     private Member member;
 
     @Column(length=30, nullable = false)

@@ -16,7 +16,7 @@ import java.util.List;
 public class Todo extends Base{
     @Id
     @Column(length = 30)
-    private String tid;
+    private String tId;
 
     @Column(length = 60, nullable = false)
     private String tname;

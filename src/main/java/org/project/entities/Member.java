@@ -13,7 +13,7 @@ import org.project.commons.contansts.MemberType;
 public class Member extends Base{
 
     @Id @GeneratedValue
-    private Long seq;
+    private Long userNo;
 
     @Column(length = 65, unique = true, nullable = false)
     private String email;
