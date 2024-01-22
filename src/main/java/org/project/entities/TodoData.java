@@ -1,0 +1,50 @@
+package org.project.entities;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.tomcat.jni.FileInfo;
+
+import java.util.List;
+import java.util.UUID;
+
+@Entity
+@Data @Builder
+@NoArgsConstructor @AllArgsConstructor
+@Table (indexes = @Index(name = "idx_bd_list", columnList = "createdAt DESC"))
+public class TodoData extends Base{
+
+    @Id
+    @GeneratedValue
+    private Long seq;
+
+    @Column(length=50, nullable = false)
+    private String gid = UUID.randomUUID().toString();
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name="tId")
+    private Todo todo;
+
+    @ManyToOne(fetch= FetchType.LAZY)
+    @JoinColumn(name="seq")
+    private Member member;
+
+    @Column(length=30, nullable = false)
+    private String poster;
+
+
+    @Column(nullable = false)
+    private String subject;
+
+    @Lob
+    @Column(nullable = false)
+    private String content;
+
+    @Transient
+    private List<FileInfo> editorImages;
+
+    @Transient
+    private List<FileInfo> attachFiles;
+}
