@@ -1,13 +1,20 @@
 package org.project.commons;
 
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.FieldError;
 
 import java.util.*;
 
+@Component
+@RequiredArgsConstructor
 public class Utils {
     private static ResourceBundle validationsBundle;
     private static ResourceBundle errorsBundle;
+
+    private final HttpServletRequest request;
 
     static {
         validationsBundle = ResourceBundle.getBundle("messages.validations");
@@ -43,4 +50,37 @@ public class Utils {
             return null;
         }
    }
+
+    /**
+     * 사이트 설정 조회
+     * @param name
+     * @return
+     */
+    public String getConfig(String name) {
+        Map<String, String> siteConfig = (Map<String, String>)request.getAttribute("siteConfig");
+        String value = siteConfig == null ? "" : siteConfig.get(name);
+
+        return value;
+    }
+
+    /**
+     * 단일 요청 데이터 조회
+     */
+    public String getParam(String name) {
+        return request.getParameter(name);
+    }
+
+    /**
+     * 복수개 요청 데이터 조회
+     *
+     */
+    public String[] getParams(String name) {
+        return request.getParameterValues(name);
+    }
+
+
+    public static int getNumber(int num, int defaultValue) {
+
+        return num <= 0 ? defaultValue : num;
+    }
 }

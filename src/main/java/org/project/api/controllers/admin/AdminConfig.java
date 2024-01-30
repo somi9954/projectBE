@@ -8,5 +8,4 @@ public class AdminConfig {
     private String siteDescription = "";
     private int cssJsVersion = 1;
     private String joinTerms = "";
-    private String thumbSize = "";
 }

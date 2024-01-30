@@ -5,9 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.FileInfo;
 
-import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -28,12 +26,8 @@ public class TodoData extends Base{
     private Todo todo;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="userNo")
+    @JoinColumn(name="USER_NO")
     private Member member;
-
-    @Column(length=30, nullable = false)
-    private String poster;
-
 
     @Column(nullable = false)
     private String subject;
@@ -42,9 +36,4 @@ public class TodoData extends Base{
     @Column(nullable = false)
     private String content;
 
-    @Transient
-    private List<FileInfo> editorImages;
-
-    @Transient
-    private List<FileInfo> attachFiles;
 }

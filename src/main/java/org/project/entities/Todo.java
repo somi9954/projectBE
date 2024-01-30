@@ -5,10 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.FileInfo;
 import org.project.commons.contansts.TodoAuthority;
 
-import java.util.List;
 
 @Entity
 @Data @Builder

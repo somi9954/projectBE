@@ -10,6 +10,7 @@ import org.project.entities.Member;
 import org.project.models.member.MemberInfo;
 import org.project.models.member.MemberLoginService;
 import org.project.models.member.MemberSaveService;
+import org.project.repositories.MemberRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +19,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Optional;
 
 
 @RestController
@@ -29,6 +30,8 @@ public class MemberController {
     private final MemberSaveService saveService;
 
     private final MemberLoginService loginService;
+
+    private final MemberRepository repository;
 
     @PostMapping
     public ResponseEntity<JSONData> join(@RequestBody @Valid RequestJoin form, Errors errors) {
@@ -66,6 +69,13 @@ public class MemberController {
 
 
         return new JSONData(member);
+    }
+
+    @GetMapping("/memberlist")
+    public JSONData memberList(@RequestParam String email) {
+
+        Optional<Member> memberList = repository.findByEmail(email);
+        return new JSONData(memberList);
     }
 
     @GetMapping("/admin")

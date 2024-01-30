@@ -6,6 +6,9 @@ import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.project.entities.Member;
+import org.project.models.member.MemberInfo;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -44,5 +47,39 @@ public class CustomJwtFilter extends GenericFilterBean {
 
 
         chain.doFilter(request,response);
+    }
+
+    public boolean isUserAdmin() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null) {
+            // 관리자 여부
+            return authentication.getAuthorities().stream()
+                    .anyMatch(authority -> authority.getAuthority().equals("MemberType_ADMIN"));
+        }
+
+        return false;
+    }
+    public MemberInfo getMember() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.isAuthenticated()) {
+            return (MemberInfo) authentication.getPrincipal();
+        }
+
+        return null;
+    }
+
+    public Member getEntity() {
+        if (isUserLoggedIn()) {
+            Member member = new ModelMapper().map(getMember(), Member.class);
+            return member;
+        }
+        return null;
+    }
+
+    public boolean isUserLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.isAuthenticated();
     }
 }
