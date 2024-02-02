@@ -75,18 +75,9 @@ public class TodoInfoService {
         if (StringUtils.hasText(skey)) {
             skey = skey.trim();
 
-            if (sopt.equals("subject")) { // 제목 검색
-                andBuilder.and(todoData.subject.contains(skey));
-
-            } else if (sopt.equals("content")) { // 내용 검색
+             if (sopt.equals("content")) { // 내용 검색
                 andBuilder.and(todoData.content.contains(skey));
 
-            } else if (sopt.equals("subject_content")) { // 제목 + 내용 검색
-                BooleanBuilder orBuilder = new BooleanBuilder();
-                orBuilder.or(todoData.subject.contains(skey))
-                        .or(todoData.content.contains(skey));
-
-                andBuilder.and(orBuilder);
             }
         }
 

@@ -31,7 +31,6 @@ public class TodoSaveService {
             data = new TodoData();
         }
 
-        data.setSubject(form.getSubject());
         data.setContent(form.getContent());
 
         todoDataRepository.saveAndFlush(data);

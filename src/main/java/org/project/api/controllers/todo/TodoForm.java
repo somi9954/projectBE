@@ -15,9 +15,6 @@ public class TodoForm {
 
     private String gid = UUID.randomUUID().toString();
 
-    @NotBlank
-    private String subject;
-
-    @NotBlank
+    @NotBlank(message = "Content cannot be blank")
     private String content;
 }

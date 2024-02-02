@@ -26,11 +26,8 @@ public class TodoData extends Base{
     private Todo todo;
 
     @ManyToOne(fetch= FetchType.LAZY)
-    @JoinColumn(name="USER_NO")
+    @JoinColumn(name="name")
     private Member member;
-
-    @Column(nullable = false)
-    private String subject;
 
     @Lob
     @Column(nullable = false)

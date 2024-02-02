@@ -31,11 +31,15 @@ public class TodoController {
     private final TodoDeleteService deleteService;
 
     @PostMapping("/write/{tId}")
-    public ResponseEntity<JSONData> write(@PathVariable("tId") String bId, @RequestBody @Valid TodoForm form, Errors errors) {
+    public ResponseEntity<JSONData> write(@PathVariable("tId") String tId, @RequestBody @Valid TodoForm form, Errors errors) {
 
+        // 유효성 검사 오류 확인
         if (errors.hasErrors()) {
+            // 유효성 검사 오류 메시지 생성
             String message = errors.getFieldErrors().stream()
-                    .map(FieldError::getDefaultMessage).collect(Collectors.joining(","));
+                    .map(FieldError::getDefaultMessage)
+                    .collect(Collectors.joining(","));
+            // BadRequestException으로 예외 처리
             throw new BadRequestException(Utils.getMessage("Not_Blank_write", "validation"));
         }
 
