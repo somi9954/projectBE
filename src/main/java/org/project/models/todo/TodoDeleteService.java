@@ -12,15 +12,13 @@ import org.springframework.stereotype.Service;
 public class TodoDeleteService {
     private final TodoInfoService infoService;
     private final TodoDataRepository repository;
-
     public void delete(Long seq) {
+
         TodoData data = infoService.get(seq);
-        String tid = data.getTodo().getTId();
 
         // 게시글 삭제
         repository.delete(data);
 
         repository.flush();
-
     }
 }
