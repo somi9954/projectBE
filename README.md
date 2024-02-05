@@ -21,7 +21,7 @@
 
 
 # 📋 기능 명세서
-## 메인 페이지
+## 메인 페이지 - 로그인 시 바로 TodoList 적용(미로그인시에는 로그인창)
 ![메인페이지](/images/main.png)
 
 ## 1. 관리자 페이지
@@ -64,5 +64,5 @@
 - TODOLIST 목록
 - TODOLIST 할일 추가
 - TODOLIST 할일 삭제
-![TODOLIST](/images/main.png)
+![TODOLIST](/images/main2.png)
 
