@@ -16,7 +16,7 @@ import java.util.Map;
  * 사이트 설정 유지
  *
  */
-@Component("siteConf")
+@Component
 @RequiredArgsConstructor
 public class SiteConfigInterceptor implements HandlerInterceptor {
 

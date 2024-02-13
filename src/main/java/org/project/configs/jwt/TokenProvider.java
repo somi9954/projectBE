@@ -1,11 +1,13 @@
 package org.project.configs.jwt;
 
+import ch.qos.logback.classic.Logger;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.extern.slf4j.Slf4j;
 import org.project.commons.Utils;
 import org.project.commons.exceptions.BadRequestException;
 import org.project.models.member.MemberInfo;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 public class TokenProvider {
 
     private final String secret;
@@ -89,6 +92,7 @@ public class TokenProvider {
             throw new BadRequestException(Utils.getMessage("EXPIRED.JWT_TOKEN", "validation"));
         } catch (UnsupportedJwtException e) {
             throw new BadRequestException(Utils.getMessage("UNSUPPORTED.JWT_TOKEN", "validation"));
+
         } catch (SecurityException | MalformedJwtException | IllegalArgumentException e) {
             throw new BadRequestException(Utils.getMessage("INVALID_FORMAT.JWT_TOKEN", "validation"));
         }

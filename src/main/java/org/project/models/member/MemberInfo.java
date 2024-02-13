@@ -1,5 +1,6 @@
 package org.project.models.member;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.project.entities.Member;
@@ -10,12 +11,14 @@ import java.util.Collection;
 
 @Data
 @Builder
+@AllArgsConstructor
 public class MemberInfo implements UserDetails {
 
     private String email;
     private String password;
     private Member member;
     private Collection<? extends GrantedAuthority> authorities;
+    private boolean social;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -26,6 +29,7 @@ public class MemberInfo implements UserDetails {
     public String getPassword() {
         return password;
     }
+
 
     @Override
     public String getUsername() {
