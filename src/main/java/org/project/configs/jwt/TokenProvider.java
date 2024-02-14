@@ -1,12 +1,11 @@
 package org.project.configs.jwt;
 
-import ch.qos.logback.classic.Logger;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import io.jsonwebtoken.security.SecurityException;
+import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 import org.project.commons.Utils;
 import org.project.commons.exceptions.BadRequestException;
@@ -22,7 +21,6 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.security.Key;
 import java.util.Arrays;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,15 +44,22 @@ public class TokenProvider {
         key = Keys.hmacShaKeyFor(bytes);
     }
 
+    @PostConstruct
+    public void init() {
+        if (infoService == null) {
+            throw new IllegalStateException("MemberInfoService가 주입되지 않았습니다.");
+        }
+    }
+
     public String createToken(Authentication authentication) {
-        String authories = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
+        String authorities  = authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
 
         Date expires = new Date((new Date()).getTime() + tokenValidityInSeconds * 1000);
 
         return Jwts.builder()
                 .setSubject(authentication.getName())
-                .claim("auth", authories)
+                .claim("auth", authorities)
                 .signWith(key, SignatureAlgorithm.HS512) // HMAC + SHA512
                 .setExpiration(expires)
                 .compact();
@@ -70,10 +75,9 @@ public class TokenProvider {
         String email = claims.getSubject();
         MemberInfo userDetails = (MemberInfo)infoService.loadUserByUsername(email);
 
-        String auth = claims.get("auth").toString();
-        List<? extends GrantedAuthority> authorities = Arrays.stream(auth.split(","))
-                .map(SimpleGrantedAuthority::new).toList();
-        userDetails.setAuthorities(authorities);
+        List<GrantedAuthority> authorities = Arrays.stream(claims.get("auth").toString().split(","))
+                .map(SimpleGrantedAuthority::new)
+                .collect(Collectors.toList());
 
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, token, authorities);
 
@@ -82,18 +86,12 @@ public class TokenProvider {
 
     public void validateToken(String token) {
         try {
-            Claims claims = Jwts.parser()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(token)
-                    .getPayload();
-
+            Jwts.parser().setSigningKey(key).build().parseClaimsJws(token);
         } catch (ExpiredJwtException e) {
             throw new BadRequestException(Utils.getMessage("EXPIRED.JWT_TOKEN", "validation"));
         } catch (UnsupportedJwtException e) {
             throw new BadRequestException(Utils.getMessage("UNSUPPORTED.JWT_TOKEN", "validation"));
-
-        } catch (SecurityException | MalformedJwtException | IllegalArgumentException e) {
+        } catch (MalformedJwtException | SignatureException | IllegalArgumentException e) {
             throw new BadRequestException(Utils.getMessage("INVALID_FORMAT.JWT_TOKEN", "validation"));
         }
     }

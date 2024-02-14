@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.project.api.controllers.members.JoinValidator;
 import org.project.api.controllers.members.RequestJoin;
 import org.project.commons.contansts.MemberType;
+import org.project.commons.exceptions.BadRequestException;
 import org.project.configs.jwt.CustomJwtFilter;
+import org.project.configs.jwt.TokenProvider;
 import org.project.entities.Member;
 import org.project.repositories.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +22,7 @@ public class MemberSaveService {
     private final PasswordEncoder passwordEncoder;
     private final JoinValidator joinValidator;
     private final CustomJwtFilter customJwtFilter;
+    private final TokenProvider tokenProvider;
 
     public void save(RequestJoin form, Errors errors) {
         joinValidator.validate(form, errors);
@@ -54,12 +57,24 @@ public class MemberSaveService {
     }
 
     public Member getKakaoMember(String accessToken) {
+        // 카카오 AccessToken 확인
+        if (accessToken == null || accessToken.isEmpty()) {
+            // AccessToken이 없는 경우 예외 처리 또는 오류 처리
+            throw new IllegalArgumentException("Kakao AccessToken이 올바르게 전달되지 않았습니다.");
+        }
 
-        // 카카오 연동 닉네임 -- 이메일 주소에 해당
-        String nickname = customJwtFilter.getEmailFromKakaoAccessToken(accessToken);
+        // Token Validation: AccessToken 유효성 검증
+        try {
+            tokenProvider.validateToken(accessToken);
+        } catch (BadRequestException e) {
+            // AccessToken이 유효하지 않은 경우 예외 처리 또는 오류 처리
+            throw new IllegalArgumentException("Kakao AccessToken이 유효하지 않습니다: " + e.getMessage());
+        }
+        // 카카오 연동 -- 이메일 주소에 해당
+        String email = customJwtFilter.getEmailFromKakaoAccessToken(accessToken);
 
         // 기존에 DB에 회원 정보가 있는 경우 & 없는 경우
-        Optional<Member> result = repository.findByEmail(nickname);
+        Optional<Member> result = repository.findByEmail(email);
 
         if (result.isPresent()) {
 
@@ -68,7 +83,7 @@ public class MemberSaveService {
             return member;
         }
 
-        Member socialMember = makeKakaoMember(nickname);
+        Member socialMember = makeKakaoMember(email);
 
         repository.save(socialMember);
 
